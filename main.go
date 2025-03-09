@@ -20,7 +20,7 @@ import (
 )
 
 func getPrice(crypto string) (float64, error) {
-	apiKey := "1451bd9877a2a3841315e390a6d096d0e863f854175d272b258b08ee0a79b63f"
+	apiKey := ""
 	url := fmt.Sprintf("https://min-api.cryptocompare.com/data/price?fsym=%s&tsyms=USD", crypto)
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
@@ -129,7 +129,7 @@ func checkFile(imagePath string) {
 func main() {
 	checkFile("images/image.jpg")
 
-	bot, err := tgbotapi.NewBotAPI("7200898472:AAFXd0TPl7NEyu0qtGNmO5iwBT9eHNLfpFk")
+	bot, err := tgbotapi.NewBotAPI("")
 	if err != nil {
 		log.Fatal(err)
 	}
