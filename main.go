@@ -13,7 +13,7 @@ import (
 	"os"
 	"regexp"
 	"strconv"
-	"strings" // Додано для роботи з рядками
+	"strings"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
 	"github.com/golang/freetype"
@@ -142,31 +142,26 @@ func main() {
 	}
 
 	for update := range updates {
-		// Перевірка, чи є повідомлення і чи є текст
 		if update.Message != nil && update.Message.Text != "" {
 			chatID := update.Message.Chat.ID
 			messageText := update.Message.Text
 
-			// Перевірка, чи повідомлення містить правильний формат, наприклад "1 BTC"
 			amount, crypto, err := extractAmountAndCrypto(messageText)
 			if err != nil {
 				continue
 			}
 
-			// Отримуємо ціну криптовалюти
 			price, err := getPrice(crypto)
 			if err != nil {
 				continue
 			}
 
-			// Додавання ціни до зображення
 			imagePath := "images/image.jpg"
 			rgba, err := addPriceToImage(imagePath, price*amount)
 			if err != nil {
 				log.Fatal(err)
 			}
 
-			// Створюємо нове зображення
 			outFile, err := os.Create("images/price_image.png")
 			if err != nil {
 				log.Fatal(err)
@@ -179,10 +174,8 @@ func main() {
 				log.Fatal(err)
 			}
 
-			// Створення лінку на графік криптовалюти
 			cryptoLink := fmt.Sprintf("https://www.tradingview.com/symbols/%sUSD/?exchange=CRYPTO", strings.ToUpper(crypto))
 
-			// Створення текстового повідомлення для користувача
 			msg := tgbotapi.NewMessage(chatID, fmt.Sprintf("💰 Price: $%.2f", price*amount))
 			msg.ParseMode = "MarkdownV2"
 
@@ -195,7 +188,6 @@ func main() {
 				),
 			)
 
-			// Відправка фото з ціною і кнопкою
 			_, err = bot.Send(photo)
 			if err != nil {
 				log.Fatal(err)
